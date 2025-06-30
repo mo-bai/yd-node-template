@@ -14,13 +14,17 @@ import { createContainer, Lifetime } from 'awilix'
 import { loadControllers, scopePerRequest } from 'awilix-koa'
 import render from 'koa-swig'
 import co from 'co'
-import path from 'path'
 import config from '@config/index'
+import serve from 'koa-static'
+//koa中没有实现的路由重定向到index.html
+import { historyApiFallback } from 'koa2-connect-history-api-fallback'
 
 const app = new Koa()
 const container = createContainer()
 
 const { port, viewDir, memoryFlag, staticDir } = config
+
+app.use(serve(staticDir))
 // 让所有service都注册到container中
 container.loadModules([`${__dirname}/services/*.ts`], {
   formatName: 'camelCase',
@@ -34,13 +38,15 @@ app.use(scopePerRequest(container))
 
 app.context.render = co.wrap(
   render({
-    root: config.viewDir,
+    root: viewDir,
     autoescape: true,
     cache: memoryFlag as 'memory' | false, // disable, set to false
     ext: 'html',
     writeBody: false
   })
 )
+
+app.use(historyApiFallback({ index: '/', whiteList: ['/api'] }))
 
 // 让所有的路有都生效
 app.use(loadControllers(`${__dirname}/routers/*.ts`))
