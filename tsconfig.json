@@ -13,8 +13,10 @@
     "paths": {
       "@interfaces/*": ["interface/*"],
       "@config/*": ["config/*"],
-      "@middlewares/*": ["middlewares/*"]
-    }
+      "@middlewares/*": ["middlewares/*"],
+      "@prismaClient/*": ["prismaClient/*"]
+    },
+    "outDir": "./dist"
   },
   "include": ["**/*"]
 }

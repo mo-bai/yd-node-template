@@ -18,6 +18,15 @@ class ApiController {
       data
     }
   }
+
+  @route('/users')
+  @GET()
+  async userList(ctx: Router.IRouterContext) {
+    const data = await this.apiService.getUsers()
+    ctx.body = {
+      data
+    }
+  }
 }
 
 export default ApiController

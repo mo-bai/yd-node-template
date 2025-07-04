@@ -6,7 +6,8 @@ addAliases({
   '@config': `${__dirname}/config`,
   '@middlewares': `${__dirname}/middlewares`,
   '@services': `${__dirname}/services`,
-  '@routers': `${__dirname}/routers`
+  '@routers': `${__dirname}/routers`,
+  '@prismaClient': `${__dirname}/prismaClient`
 })
 
 import Koa from 'koa'
@@ -18,6 +19,7 @@ import config from '@config/index'
 import serve from 'koa-static'
 //koa中没有实现的路由重定向到index.html
 import { historyApiFallback } from 'koa2-connect-history-api-fallback'
+import { assertDatabaseConnection } from '@prismaClient/index'
 
 const app = new Koa()
 const container = createContainer()
@@ -51,6 +53,8 @@ app.use(historyApiFallback({ index: '/', whiteList: ['/api'] }))
 // 让所有的路有都生效
 app.use(loadControllers(`${__dirname}/routers/*.ts`))
 
-app.listen(port, () => {
+app.listen(port, async () => {
+  // 初始化就连接数据库，避免在第一次请求时连接数据库出错或延时
+  await assertDatabaseConnection()
   console.log(`Server is running on http://localhost:${port}`)
 })
