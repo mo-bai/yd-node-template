@@ -31,3 +31,10 @@
 3. 安装 pm2
 4. 执行 build 命令生成 prismaClient
 5. 使用 pm2 启动项目 `pm2 start ecosystem.config.js `
+
+### pm2 问题
+
+1. pm2 频繁重启项目，需要关闭 pm2 的 watch 功能
+2. 可以直接使用 npm 命令，免除 ts-node 相关的内容依赖
+3. 如果 pm2 启动失败且因为配置的问题，一定要先删除 pm2 中的项目，再启动新的
+4. 可能存在内存的 pm2 和 执行的 pm2 不一致的问题，需要手动更新 pm2（pm2 update）

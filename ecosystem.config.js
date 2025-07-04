@@ -3,22 +3,17 @@ module.exports = {
   apps: [
     {
       name: 'yd-node-template',
-      script: './app.ts',
+      script: 'npm',
+      args: 'run start', // 直接执行 npm run start
       instances: 1,
       exec_mode: 'cluster',
-      interpreter: './node_modules/.bin/ts-node', // 使用本地 ts-node
-      interpreter_args: '--project ./tsconfig.json --transpile-only', // 指定 tsconfig.json 文件
       autorestart: true,
-      watch: true,
+      watch: false, // 关闭监听
       env: {
-        NODE_ENV: 'development',
-        TS_NODE_PROJECT: './tsconfig.json',
-        TS_NODE_TRANSPILE_ONLY: 'true'
+        NODE_ENV: 'development'
       },
       env_production: {
-        NODE_ENV: 'production',
-        TS_NODE_PROJECT: './tsconfig.json',
-        TS_NODE_TRANSPILE_ONLY: 'true'
+        NODE_ENV: 'production'
       },
       error_file: './logs/yd-app-error.log',
       out_file: './logs/yd-app-out.log',
